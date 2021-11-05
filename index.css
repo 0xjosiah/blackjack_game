@@ -15,14 +15,17 @@ h1{
     margin: 15px;
     padding: 0 10px 5px;
     background-color: #363803d3;
-    color: rgba(255, 255, 240, 0.87);
+    color: goldenrod;
     display: inline-block;
+}
+#roundResult-el {
+    background-color: rgba(255, 255, 255, 0);
+    /* visibility: hidden; */
 }
 
 h2 {
-    text-align: center;
+    text-align: left;
     font-size: 35px;
-    color: rgba(255, 255, 240, 0.87);
 }
 p{
     display: block;
@@ -38,7 +41,7 @@ p{
     justify-content: center;
     border: solid rgba(255, 255, 248, 0.87) 5px;
     width: 20rem;
-    height: 30rem;
+    height: 45rem;
     margin: 25px;
     display: flex;
     background-size: contain;
@@ -50,12 +53,18 @@ p{
 }
 
 .cards {
-    background-color: #363803d3;
-    margin: 30px;
-    padding: 10px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 3px 10px 10px 10px;
+    margin: 10px 0;
     height: 75px;
     width: 50px;
     display: inline-block;
+}
+#hitCard {
+    margin-left: 25px;
+    visibility: hidden;
 }
 button {
     margin: 10px;
@@ -65,7 +74,7 @@ button {
     color:rgba(255, 255, 240, 0.87)
 }
 .buttons {
-    margin-top: 25px;
+    margin: 25px 0;
 }
 .outputs{
     display: inline-block;
@@ -81,11 +90,19 @@ button {
 #hit-me-btn {
     background-color: forestgreen;
 }
-#decrement-btn {
+#stay-btn {
     background-color: darkred;
     /* margin: 0 20px; */
 }
-#save-btn {
-    margin: 30px;
+#deal-btn {
     background-color: royalblue;
+}
+#firstCard-el {
+    color: rgb(216, 0, 0);
+}
+#dcTwo-el {
+    color: rgb(216, 0, 0);
+}
+#reset-btn {
+    background-color: mediumslateblue;
 }

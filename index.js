@@ -17,21 +17,32 @@ function deal() {
     secondCardEl.textContent = secondCard
     totalEl.textContent += playerSum
     statusOfPlayer.textContent = playerStatus()
-    
-
 }
-  console.log(firstCard);
-  console.log(secondCard);
+
+let dealerCardOne = randomNum(2, 11)
+let dealerCardTwo = randomNum(2, 11)
+let dcOneEl = document.getElementById('dcOne-el')
+let dcTwoEl = document.getElementById('dcTwo-el')
+let dealerSum = dealerCardTwo + dealerCardOne
 
 
+function getDealerCards() {
+    dcOneEl.textContent = dealerCardOne
+    dcTwoEl.textContent = dealerCardTwo
+    document.getElementById('roundResult-el').textContent = result()
+}
 
 function addCard() {
-    playerSum += randomNum(2,11)
+    let addedCard = randomNum(2,11)
+    playerSum += addedCard
     totalEl.textContent = 'Total: ' + playerSum
     statusOfPlayer.textContent = playerStatus(playerSum)
-    // return sum
+    document.getElementById('hitCard').style.visibility = 'visible'
+    document.getElementById('hitCard-el').textContent = addedCard
+    if (isBusted(playerSum)) {
+        return bustedMessage()
+    }
 }
-// console.log(addCard())
 
 function isBusted(sum) {
     if (sum < 21) {
@@ -42,6 +53,11 @@ function isBusted(sum) {
         return true;
     }
 }
+
+function bustedMessage() {
+    document.getElementById('roundResult-el').textContent = 'hahahah what a loser!'
+}
+
 function isBlackjack(sum) {
     if (sum === 21) {
         return true;
@@ -49,15 +65,36 @@ function isBlackjack(sum) {
         return false;
     }
 }
+
 function playerStatus() {
-    if (isBusted(playerSum)===true) {
+    if (isBusted(playerSum)) {
         return "Busted!"
-    } else if (isBlackjack(playerSum)===true) {
+    } else if (isBlackjack(playerSum)) {
         return "Congrats! You have Blackjack!"
     } else {
         return "Do you want to hit or stay?"
     }
 }
+
+function result() {
+    if (isBusted(playerSum)) {
+        return bustedMessage()
+    } else if (playerSum < dealerSum) {
+        return 'You lose! You fucking loser!'
+    } else if (playerSum > dealerSum && !isBusted(playerSum)) {
+        return 'Wow, you win!'
+    } else if (playerSum === dealerSum) {
+        return 'draw'
+    } else {
+        return 'this ain\'t it chief'
+    }
+}
+
+function reset() {
+    return location.reload();
+}
+
+
 console.log(`are you busted? ${isBusted()}`)
 console.log(`do you have blackjack? ${isBlackjack()}`)
 console.log(playerStatus())

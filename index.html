@@ -13,11 +13,15 @@
         <div class="background">
             <div class="content">
                 <h1>Blackjack</h1>
+                <h3>Your Cards</h3>
                 <div class="cards">
-                    <h2 id="firstCard-el">0</h2>
+                    <h2 id="firstCard-el"></h2>
                 </div>
                 <div class="cards">
-                    <h2 id="secondCard-el">0</h2>
+                    <h2 id="secondCard-el"></h2>
+                </div>
+                <div class="cards" id="hitCard">
+                    <h2 id="hitCard-el">0</h2>
                 </div>
                 <div class="total">
                     <h3 id="total-el">Total: </h3>
@@ -27,8 +31,21 @@
                 </div>
                 <div class="buttons">
                     <button id="hit-me-btn" onclick="addCard()">Hit Me</button>
-                    <button id="decrement-btn" onclick="decrement()">Stay</button>
-                    <button id="save-btn" onclick="deal()">Deal</button>
+                    <button id="stay-btn" onclick="getDealerCards()">Stay</button>
+                    <button id="deal-btn" onclick="deal()">Deal</button>
+                    <button id="reset-btn" onclick="reset()">Reset</button>
+                </div>
+                <div class="round-result">
+                    <h1 id="roundResult-el"></h1>
+                </div>
+                <div class="dealer">
+                    <h3>Dealer's Cards:</h3>
+                    <div class="cards">
+                        <h2 id="dcOne-el"></h2>
+                    </div>
+                    <div class="cards">
+                        <h2 id="dcTwo-el"></h2>
+                    </div>
                 </div>
             </div>
         </div>
