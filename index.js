@@ -4,66 +4,78 @@ function randomNum(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
 }
-let firstCardEl = document.getElementById('firstCard-el')
-let secondCardEl = document.getElementById('secondCard-el')
-let totalEl = document.getElementById('total-el')
-let firstCard = randomNum(2, 11)
-let secondCard = randomNum(2, 11)
-let playerSum = firstCard + secondCard
-let statusOfPlayer = document.getElementById('player-status')
-
 const cardDeck = {
     'spades': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
     'clubs': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
     'hearts': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
     'diamonds': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
 }
+let firstCardEl = document.getElementById('firstCard-el')
+let secondCardEl = document.getElementById('secondCard-el')
+let totalEl = document.getElementById('total-el')
+let firstCard = randCard(cardDeck)
+let secondCard = randCard(cardDeck)
+let playerSum = 0
+let statusOfPlayer = document.getElementById('player-status')
+
 
 const playerHand = {
   'cardOne': [],
   'cardTwo': [],
 }
 
-function randCard () {
-  let suits = Object.keys(cardDeck)
-  let suit = suits[Math.floor(Math.random() * suits.length)]
-  let suitDeck = cardDeck[suits[Math.floor(Math.random() * suits.length)]]
-  let card = suitDeck[Math.floor(Math.random() * suitDeck.length)]
-  return card
-}
+function randCard (obj) {
+    let keys = Object.keys(obj)
+    let key = keys[Math.floor(Math.random() * keys.length)]
+    let arr = obj[keys[Math.floor(Math.random() * keys.length)]]
+    let card = arr[Math.floor(Math.random() * arr.length)]
+    return card
+  }
 
 function deal() {
-    if (firstCard === 11) {
-        firstCardEl.textContent = 'A'
+    firstCardEl.textContent = firstCard
+    secondCardEl.textContent = secondCard
+    if (firstCard === 'J' || firstCard === 'Q' || firstCard === 'K') {
+        playerSum += 10
+    } else if (firstCard === 'A') {
+        playerSum += 11
     } else {
-        firstCardEl.textContent = firstCard
+        playerSum += firstCard
     }
-    if (secondCard === 11) {
-        secondCardEl.textContent = 'A'
+    if (secondCard === 'J' || secondCard === 'Q' || secondCard === 'K') {
+        playerSum += 10
+    } else if (secondCard === 'A') {
+        playerSum += 11
     } else {
-        secondCardEl.textContent = secondCard
+        playerSum += secondCard
     }
     totalEl.textContent += playerSum
     statusOfPlayer.textContent = playerStatus()
 }
 
-let dealerCardOne = randomNum(2, 11)
-let dealerCardTwo = randomNum(2, 11)
+let dealerCardOne = randCard(cardDeck)
+let dealerCardTwo = randCard(cardDeck)
 let dcOneEl = document.getElementById('dcOne-el')
 let dcTwoEl = document.getElementById('dcTwo-el')
-let dealerSum = dealerCardTwo + dealerCardOne
+let dealerSum = 0
 
 
 function getDealerCards() {
-    if (dealerCardOne === 11) {
-        dcOneEl.textContent = 'A'
+    dcOneEl.textContent = dealerCardOne
+    dcTwoEl.textContent = dealerCardTwo
+    if (dealerCardOne === 'J' || dealerCardOne === 'Q' || dealerCardOne === 'K') {
+        dealerSum += 10
+    } else if (dealerCardOne === 'A') {
+        dealerSum += 11
     } else {
-        dcOneEl.textContent = dealerCardOne
+        dealerSum += dealerCardOne
     }
-    if (dealerCardTwo === 11) {
-        dcTwoEl.textContent = 'A'
+    if (dealerCardTwo === 'J' || dealerCardTwo === 'Q' || dealerCardTwo === 'K') {
+        dealerSum += 10
+    } else if (dealerCardTwo === 'A') {
+        dealerSum += 11
     } else {
-        dcTwoEl.textContent = dealerCardTwo
+        dealerSum += dealerCardTwo
     }
     document.getElementById('roundResult-el').textContent = result()
 }
