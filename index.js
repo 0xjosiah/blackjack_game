@@ -12,9 +12,37 @@ let secondCard = randomNum(2, 11)
 let playerSum = firstCard + secondCard
 let statusOfPlayer = document.getElementById('player-status')
 
+const cardDeck = {
+    'spades': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
+    'clubs': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
+    'hearts': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
+    'diamonds': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
+}
+
+const playerHand = {
+  'cardOne': [],
+  'cardTwo': [],
+}
+
+function randCard () {
+  let suits = Object.keys(cardDeck)
+  let suit = suits[Math.floor(Math.random() * suits.length)]
+  let suitDeck = cardDeck[suits[Math.floor(Math.random() * suits.length)]]
+  let card = suitDeck[Math.floor(Math.random() * suitDeck.length)]
+  return card
+}
+
 function deal() {
-    firstCardEl.textContent = firstCard
-    secondCardEl.textContent = secondCard
+    if (firstCard === 11) {
+        firstCardEl.textContent = 'A'
+    } else {
+        firstCardEl.textContent = firstCard
+    }
+    if (secondCard === 11) {
+        secondCardEl.textContent = 'A'
+    } else {
+        secondCardEl.textContent = secondCard
+    }
     totalEl.textContent += playerSum
     statusOfPlayer.textContent = playerStatus()
 }
@@ -27,18 +55,38 @@ let dealerSum = dealerCardTwo + dealerCardOne
 
 
 function getDealerCards() {
-    dcOneEl.textContent = dealerCardOne
-    dcTwoEl.textContent = dealerCardTwo
+    if (dealerCardOne === 11) {
+        dcOneEl.textContent = 'A'
+    } else {
+        dcOneEl.textContent = dealerCardOne
+    }
+    if (dealerCardTwo === 11) {
+        dcTwoEl.textContent = 'A'
+    } else {
+        dcTwoEl.textContent = dealerCardTwo
+    }
     document.getElementById('roundResult-el').textContent = result()
 }
 
 function addCard() {
-    let addedCard = randomNum(2,11)
-    playerSum += addedCard
-    totalEl.textContent = 'Total: ' + playerSum
-    statusOfPlayer.textContent = playerStatus(playerSum)
     document.getElementById('hitCard').style.visibility = 'visible'
-    document.getElementById('hitCard-el').textContent = addedCard
+    let addedCard = randomNum(2,11)
+    if (addedCard === 11 && playerSum < 11) {
+        playerSum += addedCard
+        totalEl.textContent = 'Total: ' + playerSum
+        statusOfPlayer.textContent = playerStatus(playerSum)
+        document.getElementById('hitCard-el').textContent = 'A'
+    } else if (addedCard === 11 && playerSum > 11) {
+        playerSum += 1
+        totalEl.textContent = 'Total: ' + playerSum
+        statusOfPlayer.textContent = playerStatus(playerSum)
+        document.getElementById('hitCard-el').textContent = 'A'
+    } else {
+        playerSum += addedCard
+        totalEl.textContent = 'Total: ' + playerSum
+        statusOfPlayer.textContent = playerStatus(playerSum)
+        document.getElementById('hitCard-el').textContent = addedCard
+    }
     if (isBusted(playerSum)) {
         return bustedMessage()
     }
@@ -80,7 +128,7 @@ function result() {
     if (isBusted(playerSum)) {
         return bustedMessage()
     } else if (playerSum < dealerSum) {
-        return 'You lose! You fucking loser!'
+        return 'You lose! You f*cking loser!'
     } else if (playerSum > dealerSum && !isBusted(playerSum)) {
         return 'Wow, you win!'
     } else if (playerSum === dealerSum) {
@@ -98,3 +146,12 @@ function reset() {
 console.log(`are you busted? ${isBusted()}`)
 console.log(`do you have blackjack? ${isBlackjack()}`)
 console.log(playerStatus())
+
+
+// LIMITATIONS:
+// not true odds as the full deck is not filled out (i.e. no face cards, no suits)
+// this applies to both dealer and players. 
+// as a result you can get two '11' cards for instance
+// obviously can't bet
+// have to follow general black jack rules - can't try to break it
+// have to reload page to deal a new hand
