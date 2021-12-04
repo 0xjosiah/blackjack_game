@@ -1,15 +1,38 @@
+const spade = '♠️'
+const club = '♣️'
+const heart = '♥️'
+const diamond = '♦️'
 
-function randomNum(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
-}
 const cardDeck = {
     'spades': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
     'clubs': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
     'hearts': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
     'diamonds': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
 }
+function randCard (obj) {
+    let card = []
+    let keys = Object.keys(obj)
+    let key = keys[Math.floor(Math.random() * keys.length)]
+    // console.log(key)
+    // console.log(obj[key])
+    let arr = obj[key]
+    // console.log(arr)
+    card.push(arr[Math.floor(Math.random() * arr.length)])
+    if (key === 'spades') {
+        card.push(spade)
+    } else if (key === 'club') {
+        card.push(club)
+    } else if (key === 'heart') {
+        card.push(heart)
+    } else {
+        card.push(diamond)
+    }
+    arr.splice(card[0], 1)
+    console.log(cardDeck)
+    return card
+//somthing isnt right here
+}
+
 let firstCardEl = document.getElementById('firstCard-el')
 let secondCardEl = document.getElementById('secondCard-el')
 let totalEl = document.getElementById('total-el')
@@ -19,35 +42,43 @@ let playerSum = 0
 let statusOfPlayer = document.getElementById('player-status')
 
 
-const playerHand = {
-  'cardOne': [],
-  'cardTwo': [],
+
+function dealtCard (arr, value) {
+    let index = arr.indexOf(value);
+    if (index > -1) {
+      arr.splice(index, 1);
+    }
+    return arr;
 }
 
-function randCard (obj) {
-    let keys = Object.keys(obj)
-    let key = keys[Math.floor(Math.random() * keys.length)]
-    let arr = obj[keys[Math.floor(Math.random() * keys.length)]]
-    let card = arr[Math.floor(Math.random() * arr.length)]
-    return card
-  }
+if (firstCard[1] === spade || firstCard[1] === club) {
+    firstCardEl.style.color = 'black'
+} else {
+    firstCardEl.style.color = 'red'
+}
+
+if (secondCard[1] === spade || secondCard[1] === club) {
+    secondCardEl.style.color = 'black'
+} else {
+    secondCardEl.style.color = 'red'
+}
 
 function deal() {
-    firstCardEl.textContent = firstCard
-    secondCardEl.textContent = secondCard
-    if (firstCard === 'J' || firstCard === 'Q' || firstCard === 'K') {
+    firstCardEl.textContent = firstCard.join('')
+    secondCardEl.textContent = secondCard.join('')
+    if (firstCard[0] === 'J' || firstCard[0] === 'Q' || firstCard[0] === 'K') {
         playerSum += 10
-    } else if (firstCard === 'A') {
+    } else if (firstCard[0] === 'A') {
         playerSum += 11
     } else {
-        playerSum += firstCard
+        playerSum += firstCard[0]
     }
-    if (secondCard === 'J' || secondCard === 'Q' || secondCard === 'K') {
+    if (secondCard[0] === 'J' || secondCard[0] === 'Q' || secondCard[0] === 'K') {
         playerSum += 10
-    } else if (secondCard === 'A') {
+    } else if (secondCard[0] === 'A') {
         playerSum += 11
     } else {
-        playerSum += secondCard
+        playerSum += secondCard[0]
     }
     totalEl.textContent += playerSum
     statusOfPlayer.textContent = playerStatus()
@@ -59,46 +90,60 @@ let dcOneEl = document.getElementById('dcOne-el')
 let dcTwoEl = document.getElementById('dcTwo-el')
 let dealerSum = 0
 
+if (dealerCardOne[1] === spade || dealerCardOne[1] === club) {
+    dcOneEl.style.color = 'black'
+} else {
+    dcOneEl.style.color = 'red'
+}
+if (dealerCardTwo[1] === spade || dealerCardTwo[1] === club) {
+    dcTwoEl.style.color = 'black'
+} else {
+    dcTwoEl.style.color = 'red'
+}
 
 function getDealerCards() {
-    dcOneEl.textContent = dealerCardOne
-    dcTwoEl.textContent = dealerCardTwo
-    if (dealerCardOne === 'J' || dealerCardOne === 'Q' || dealerCardOne === 'K') {
+    dcOneEl.textContent = dealerCardOne.join('')
+    dcTwoEl.textContent = dealerCardTwo.join('')
+    if (dealerCardOne[0] === 'J' || dealerCardOne[0] === 'Q' || dealerCardOne[0] === 'K') {
         dealerSum += 10
-    } else if (dealerCardOne === 'A') {
+    } else if (dealerCardOne[0] === 'A') {
         dealerSum += 11
     } else {
-        dealerSum += dealerCardOne
+        dealerSum += dealerCardOne[0]
     }
-    if (dealerCardTwo === 'J' || dealerCardTwo === 'Q' || dealerCardTwo === 'K') {
+    if (dealerCardTwo[0] === 'J' || dealerCardTwo[0] === 'Q' || dealerCardTwo[0] === 'K') {
         dealerSum += 10
-    } else if (dealerCardTwo === 'A') {
+    } else if (dealerCardTwo[0] === 'A') {
         dealerSum += 11
     } else {
-        dealerSum += dealerCardTwo
+        dealerSum += dealerCardTwo[0]
     }
     document.getElementById('roundResult-el').textContent = result()
 }
 
+let hitCardEl = document.getElementById('hitCard-el')
+
+
 function addCard() {
     document.getElementById('hitCard').style.visibility = 'visible'
-    let addedCard = randomNum(2,11)
-    if (addedCard === 11 && playerSum < 11) {
-        playerSum += addedCard
-        totalEl.textContent = 'Total: ' + playerSum
-        statusOfPlayer.textContent = playerStatus(playerSum)
-        document.getElementById('hitCard-el').textContent = 'A'
-    } else if (addedCard === 11 && playerSum > 11) {
-        playerSum += 1
-        totalEl.textContent = 'Total: ' + playerSum
-        statusOfPlayer.textContent = playerStatus(playerSum)
-        document.getElementById('hitCard-el').textContent = 'A'
+    let addedCard = randCard(cardDeck)
+    if (addedCard[1] === spade || addedCard[1] === club) {
+        hitCardEl.style.color = 'black'
     } else {
-        playerSum += addedCard
-        totalEl.textContent = 'Total: ' + playerSum
-        statusOfPlayer.textContent = playerStatus(playerSum)
-        document.getElementById('hitCard-el').textContent = addedCard
+        hitCardEl.style.color = 'red'
     }
+    hitCardEl.textContent = addedCard.join('')
+    if (addedCard[0] === 'A' && playerSum < 11) {
+        playerSum += 11
+    } else if (addedCard[0] === 'A' && playerSum > 11) {
+        playerSum += 1
+    } else if (addedCard[0] === 'J' || addedCard[0] === 'Q' || addedCard[0] === 'K') {
+        playerSum += 10
+    } else {
+        playerSum += addedCard[0]
+    }
+    totalEl.textContent =  `Total: ${playerSum}`
+    statusOfPlayer.textContent = playerStatus(playerSum)
     if (isBusted(playerSum)) {
         return bustedMessage()
     }
@@ -158,7 +203,6 @@ function reset() {
 console.log(`are you busted? ${isBusted()}`)
 console.log(`do you have blackjack? ${isBlackjack()}`)
 console.log(playerStatus())
-
 
 // LIMITATIONS:
 // not true odds as the full deck is not filled out (i.e. no face cards, no suits)
