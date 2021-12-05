@@ -1,71 +1,56 @@
-const spade = '♠️'
-const club = '♣️'
-const heart = '♥️'
-const diamond = '♦️'
-
 const cardDeck = {
-    'spades': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
-    'clubs': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
-    'hearts': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
-    'diamonds': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
+    '♠️': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
+    '♣️': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
+    '♥️': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K'],
+    '♦️': ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
 }
+
 function randCard (obj) {
     let card = []
-    let keys = Object.keys(obj)
-    let key = keys[Math.floor(Math.random() * keys.length)]
-    // console.log(key)
-    // console.log(obj[key])
-    let arr = obj[key]
-    // console.log(arr)
-    card.push(arr[Math.floor(Math.random() * arr.length)])
-    if (key === 'spades') {
-        card.push(spade)
-    } else if (key === 'club') {
-        card.push(club)
-    } else if (key === 'heart') {
-        card.push(heart)
-    } else {
-        card.push(diamond)
-    }
-    arr.splice(card[0], 1)
-    console.log(cardDeck)
+    let suits = Object.keys(obj)
+    let randSuit = suits[Math.floor(Math.random() * suits.length)]
+    card.push(randSuit)
+    let arr = obj[card[0]]
+    card.unshift(arr[Math.floor(Math.random() * arr.length)])
+    cardDeck[card[1]].splice(cardDeck[card[1]].indexOf(card[0]), 1)
     return card
-//somthing isnt right here
 }
 
 let firstCardEl = document.getElementById('firstCard-el')
 let secondCardEl = document.getElementById('secondCard-el')
 let totalEl = document.getElementById('total-el')
-let firstCard = randCard(cardDeck)
-let secondCard = randCard(cardDeck)
+let firstCard = []
+let secondCard = []
 let playerSum = 0
 let statusOfPlayer = document.getElementById('player-status')
 
-
-
-function dealtCard (arr, value) {
-    let index = arr.indexOf(value);
-    if (index > -1) {
-      arr.splice(index, 1);
-    }
-    return arr;
-}
-
-if (firstCard[1] === spade || firstCard[1] === club) {
-    firstCardEl.style.color = 'black'
-} else {
-    firstCardEl.style.color = 'red'
-}
-
-if (secondCard[1] === spade || secondCard[1] === club) {
-    secondCardEl.style.color = 'black'
-} else {
-    secondCardEl.style.color = 'red'
-}
+let dealerCardOne = []
+let dealerCardTwo = []
+let dcOneEl = document.getElementById('dcOne-el')
+let dcTwoEl = document.getElementById('dcTwo-el')
+let dealerSum = 0
 
 function deal() {
+    //deals cards
+    firstCard = randCard(cardDeck)
+    dealerCardOne = randCard(cardDeck)
+    secondCard = randCard(cardDeck)
+    dealerCardTwo = randCard(cardDeck)
+    //appropriately shades player cards
+    if (firstCard[1] === '♠️' || firstCard[1] === '♣️') {
+        firstCardEl.style.color = 'black'
+    } else {
+        firstCardEl.style.color = 'red'
+    }
+    if (secondCard[1] === '♠️' || secondCard[1] === '♣️') {
+        secondCardEl.style.color = 'black'
+    } else {
+        secondCardEl.style.color = 'red'
+    }
+    //prints player cards on screen
     firstCardEl.textContent = firstCard.join('')
     secondCardEl.textContent = secondCard.join('')
+    //effectively adds player sum
     if (firstCard[0] === 'J' || firstCard[0] === 'Q' || firstCard[0] === 'K') {
         playerSum += 10
     } else if (firstCard[0] === 'A') {
@@ -80,30 +65,30 @@ function deal() {
     } else {
         playerSum += secondCard[0]
     }
+    //prints player sum
     totalEl.textContent += playerSum
+    //prints player status
     statusOfPlayer.textContent = playerStatus()
 }
 
-let dealerCardOne = randCard(cardDeck)
-let dealerCardTwo = randCard(cardDeck)
-let dcOneEl = document.getElementById('dcOne-el')
-let dcTwoEl = document.getElementById('dcTwo-el')
-let dealerSum = 0
 
-if (dealerCardOne[1] === spade || dealerCardOne[1] === club) {
+//appropriately shades dealer's cards
+if (dealerCardOne[1] === '♠️' || dealerCardOne[1] === '♣️') {
     dcOneEl.style.color = 'black'
 } else {
     dcOneEl.style.color = 'red'
 }
-if (dealerCardTwo[1] === spade || dealerCardTwo[1] === club) {
+if (dealerCardTwo[1] === '♠️' || dealerCardTwo[1] === '♣️') {
     dcTwoEl.style.color = 'black'
 } else {
     dcTwoEl.style.color = 'red'
 }
 
 function getDealerCards() {
+    //prints dealer cards
     dcOneEl.textContent = dealerCardOne.join('')
     dcTwoEl.textContent = dealerCardTwo.join('')
+    //effectively adds dealer cards
     if (dealerCardOne[0] === 'J' || dealerCardOne[0] === 'Q' || dealerCardOne[0] === 'K') {
         dealerSum += 10
     } else if (dealerCardOne[0] === 'A') {
@@ -118,16 +103,16 @@ function getDealerCards() {
     } else {
         dealerSum += dealerCardTwo[0]
     }
+    //prints final result
     document.getElementById('roundResult-el').textContent = result()
 }
 
 let hitCardEl = document.getElementById('hitCard-el')
 
-
 function addCard() {
     document.getElementById('hitCard').style.visibility = 'visible'
     let addedCard = randCard(cardDeck)
-    if (addedCard[1] === spade || addedCard[1] === club) {
+    if (addedCard[1] === '♠️' || addedCard[1] === '♣️') {
         hitCardEl.style.color = 'black'
     } else {
         hitCardEl.style.color = 'red'
@@ -205,9 +190,7 @@ console.log(`do you have blackjack? ${isBlackjack()}`)
 console.log(playerStatus())
 
 // LIMITATIONS:
-// not true odds as the full deck is not filled out (i.e. no face cards, no suits)
-// this applies to both dealer and players. 
-// as a result you can get two '11' cards for instance
 // obviously can't bet
 // have to follow general black jack rules - can't try to break it
 // have to reload page to deal a new hand
+//dealer doesn't hit until win/bust if card sum is below player's
