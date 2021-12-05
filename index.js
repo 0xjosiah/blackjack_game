@@ -12,16 +12,17 @@ function randCard (obj) {
     card.push(randSuit)
     let arr = obj[card[0]]
     card.unshift(arr[Math.floor(Math.random() * arr.length)])
+    //'deletes' dealt card from deck
     cardDeck[card[1]].splice(cardDeck[card[1]].indexOf(card[0]), 1)
     return card
 }
 
-let firstCardEl = document.getElementById('firstCard-el')
-let secondCardEl = document.getElementById('secondCard-el')
-let totalEl = document.getElementById('total-el')
 let firstCard = []
 let secondCard = []
+let firstCardEl = document.getElementById('firstCard-el')
+let secondCardEl = document.getElementById('secondCard-el')
 let playerSum = 0
+let totalEl = document.getElementById('total-el')
 let statusOfPlayer = document.getElementById('player-status')
 
 let dealerCardOne = []
@@ -29,13 +30,17 @@ let dealerCardTwo = []
 let dcOneEl = document.getElementById('dcOne-el')
 let dcTwoEl = document.getElementById('dcTwo-el')
 let dealerSum = 0
+let dealerCardCount = 0
+let dealerTotalEl = document.getElementById('dealer-total-el')
 
 function deal() {
     //deals cards
     firstCard = randCard(cardDeck)
     dealerCardOne = randCard(cardDeck)
+    dealerCardCount +=1
     secondCard = randCard(cardDeck)
     dealerCardTwo = randCard(cardDeck)
+    dealerCardCount +=1
     //appropriately shades player cards
     if (firstCard[1] === '♠️' || firstCard[1] === '♣️') {
         firstCardEl.style.color = 'black'
@@ -47,9 +52,16 @@ function deal() {
     } else {
         secondCardEl.style.color = 'red'
     }
-    //prints player cards on screen
+    //appropriately shades dealer card2
+    if (dealerCardTwo[1] === '♠️' || dealerCardTwo[1] === '♣️') {
+        dcTwoEl.style.color = 'black'
+    } else {
+        dcTwoEl.style.color = 'red'
+    }
+    //prints player cards and dealer card2 on screen
     firstCardEl.textContent = firstCard.join('')
     secondCardEl.textContent = secondCard.join('')
+    dcTwoEl.textContent = dealerCardTwo.join('')
     //effectively adds player sum
     if (firstCard[0] === 'J' || firstCard[0] === 'Q' || firstCard[0] === 'K') {
         playerSum += 10
@@ -60,34 +72,13 @@ function deal() {
     }
     if (secondCard[0] === 'J' || secondCard[0] === 'Q' || secondCard[0] === 'K') {
         playerSum += 10
-    } else if (secondCard[0] === 'A') {
+    } else if (secondCard[0] === 'A' && firstCard[0] !== 'A') {
         playerSum += 11
+    } else if (secondCard[0] === 'A' && firstCard[0] === 'A') {
+        playerSum += 1
     } else {
         playerSum += secondCard[0]
     }
-    //prints player sum
-    totalEl.textContent += playerSum
-    //prints player status
-    statusOfPlayer.textContent = playerStatus()
-}
-
-
-//appropriately shades dealer's cards
-if (dealerCardOne[1] === '♠️' || dealerCardOne[1] === '♣️') {
-    dcOneEl.style.color = 'black'
-} else {
-    dcOneEl.style.color = 'red'
-}
-if (dealerCardTwo[1] === '♠️' || dealerCardTwo[1] === '♣️') {
-    dcTwoEl.style.color = 'black'
-} else {
-    dcTwoEl.style.color = 'red'
-}
-
-function getDealerCards() {
-    //prints dealer cards
-    dcOneEl.textContent = dealerCardOne.join('')
-    dcTwoEl.textContent = dealerCardTwo.join('')
     //effectively adds dealer cards
     if (dealerCardOne[0] === 'J' || dealerCardOne[0] === 'Q' || dealerCardOne[0] === 'K') {
         dealerSum += 10
@@ -98,19 +89,27 @@ function getDealerCards() {
     }
     if (dealerCardTwo[0] === 'J' || dealerCardTwo[0] === 'Q' || dealerCardTwo[0] === 'K') {
         dealerSum += 10
-    } else if (dealerCardTwo[0] === 'A') {
+    } else if (dealerCardTwo[0] === 'A' && dealerCardOne[0] !== 'A') {
         dealerSum += 11
+    } else if (dealerCardTwo[0] === 'A' && dealerCardOne[0] === 'A') {
+        dealerSum += 1
     } else {
         dealerSum += dealerCardTwo[0]
     }
-    //prints final result
-    document.getElementById('roundResult-el').textContent = result()
+    if (dealerSum === 21) {
+        getDealerCards()
+    }
+    //prints player sum
+    totalEl.textContent += playerSum
+    //prints player status
+    statusOfPlayer.textContent = playerStatus()
 }
 
 let hitCardEl = document.getElementById('hitCard-el')
 
 function addCard() {
-    document.getElementById('hitCard').style.visibility = 'visible'
+    document.getElementById('hitCard').classList.add('active')
+    document.getElementById('hitCard').style.transform = 'scale(1)'
     let addedCard = randCard(cardDeck)
     if (addedCard[1] === '♠️' || addedCard[1] === '♣️') {
         hitCardEl.style.color = 'black'
@@ -120,7 +119,7 @@ function addCard() {
     hitCardEl.textContent = addedCard.join('')
     if (addedCard[0] === 'A' && playerSum < 11) {
         playerSum += 11
-    } else if (addedCard[0] === 'A' && playerSum > 11) {
+    } else if (addedCard[0] === 'A' && playerSum >= 11) {
         playerSum += 1
     } else if (addedCard[0] === 'J' || addedCard[0] === 'Q' || addedCard[0] === 'K') {
         playerSum += 10
@@ -132,6 +131,65 @@ function addCard() {
     if (isBusted(playerSum)) {
         return bustedMessage()
     }
+}
+
+function getDealerCards() {
+    //shades dealer card1
+    if (dealerCardOne[1] === '♠️' || dealerCardOne[1] === '♣️') {
+        dcOneEl.style.color = 'black'
+    } else {
+        dcOneEl.style.color = 'red'
+    }
+    //prints dealer's remaining card
+    dcOneEl.textContent = dealerCardOne.join('')
+    //deals remaining cards if necessary 
+    if (dealerSum < 17) {
+        setTimeout(dealerAddCard, 1000)
+        // dealerAddCard()
+    } else {
+        document.getElementById('roundResult-el').textContent = result()
+        document.getElementById('roundResult-el').classList.add('active')
+    }
+    //prints dealer sum
+    dealerTotalEl.textContent = `Total: ${dealerSum}`
+    //prints final result
+}
+
+let dealerHitCardEl = document.getElementById('dHitCard-el')
+
+function dealerAddCard() {
+    document.getElementById('dHitCard').classList.add('active')
+    document.getElementById('dHitCard').style.transform = 'scale(1)'
+    // modal.classList.add('active')
+    let addedCard = randCard(cardDeck)
+    dealerCardCount +=1
+    if (addedCard[1] === '♠️' || addedCard[1] === '♣️') {
+        dealerHitCardEl.style.color = 'black'
+    } else {
+        dealerHitCardEl.style.color = 'red'
+    }
+    dealerHitCardEl.textContent = addedCard.join('')
+    if (addedCard[0] === 'A' && dealerSum < 11) {
+        dealerSum += 11
+    } else if (addedCard[0] === 'A' && dealerSum >= 11) {
+        dealerSum += 1
+    } else if (addedCard[0] === 'J' || addedCard[0] === 'Q' || addedCard[0] === 'K') {
+        dealerSum += 10
+    } else {
+        dealerSum += addedCard[0]
+    }
+    dealerTotalEl.textContent =  `Total: ${dealerSum}`
+    if (isBusted(dealerSum)) {
+        document.getElementById('dealer-total-el').textContent += ' - Dealer Bust'
+        document.getElementById('roundResult-el').textContent = 'Wow, you win!'
+    } else {
+        document.getElementById('roundResult-el').textContent = result()
+        document.getElementById('roundResult-el').classList.add('active')
+    }
+}
+
+if (dealerCardCount >= 3 && dealerSum < 17) {
+    setTimeout(dealerAddCard, 1000)
 }
 
 function isBusted(sum) {

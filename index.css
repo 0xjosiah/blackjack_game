@@ -18,6 +18,9 @@ h1{
     color: goldenrod;
     display: inline-block;
 }
+.hidden {
+    /* transform: scale(0); */
+}
 #roundResult-el {
     background-color: rgba(255, 255, 255, 0);
     /* visibility: hidden; */
@@ -26,6 +29,7 @@ h1{
 h2 {
     text-align: left;
     font-size: 1.5rem;
+    color: white;
 }
 p{
     display: block;
@@ -62,9 +66,46 @@ p{
     width: 50px;
     display: inline-block;
 }
+.hitCard {
+    margin-left: 25px;
+    transform: scale(0);
+}
+.active {
+    /* transform: scale(1); */
+    animation: newCard 1s ease-in;
+}
+
+@keyframes newCard {
+    0% {
+        transform: scale(.1);
+    }
+    20% {
+        transform: scale(.3);
+        
+    }
+    50% {
+        transform: scale(.7);
+        
+    }
+    80% {
+        
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+
+    }
+}
+
 #hitCard {
     margin-left: 25px;
-    visibility: hidden;
+    /* visibility: hidden; */
+    transform: scale(0);
+}
+#dHitCard {
+    margin-left: 25px;
+    /* visibility: hidden; */
+    transform: scale(0);
 }
 button {
     margin: 10px;
@@ -87,10 +128,10 @@ button {
     background-color: royalblue;
 }
 #firstCard-el {
-    color: black;
+    /* color: black; */
 }
 #dcTwo-el {
-    color: rgb(216, 0, 0);
+    /* color: rgb(216, 0, 0); */
 }
 #reset-btn {
     background-color: mediumslateblue;

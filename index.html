@@ -15,10 +15,10 @@
                 <h1>Blackjack</h1>
                 <h3>Your Cards</h3>
                 <div class="cards">
-                    <h2 id="firstCard-el"></h2>
+                    <h2 id="firstCard-el">0</h2>
                 </div>
                 <div class="cards">
-                    <h2 id="secondCard-el"></h2>
+                    <h2 id="secondCard-el">0</h2>
                 </div>
                 <div class="cards" id="hitCard">
                     <h2 id="hitCard-el">0</h2>
@@ -36,15 +36,21 @@
                     <button id="reset-btn" onclick="reset()">Reset</button>
                 </div>
                 <div class="round-result">
-                    <h1 id="roundResult-el"></h1>
+                    <h1 class='hidden' id="roundResult-el"></h1>
                 </div>
                 <div class="dealer">
                     <h3>Dealer's Cards:</h3>
                     <div class="cards">
-                        <h2 id="dcOne-el"></h2>
+                        <h2 id="dcOne-el">0</h2>
                     </div>
                     <div class="cards">
-                        <h2 id="dcTwo-el"></h2>
+                        <h2 id="dcTwo-el">0</h2>
+                    </div>
+                    <div class="cards" id="dHitCard">
+                        <h2 id="dHitCard-el">0</h2>
+                    </div>
+                    <div class="total">
+                        <h3 id="dealer-total-el">Total: </h3>
                     </div>
                 </div>
             </div>
